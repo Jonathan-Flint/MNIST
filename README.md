@@ -1,7 +1,6 @@
 # MNIST
 
-# The MNIST dataset is a dataset of written numbers stored in 28x28 pixel greyscale images and is commonly used as a training dataset for neural networks and is frequently used as 
-# an introductory learning tool for Machine Learning (ML) and Artificial Intelligence (AI)
+# The MNIST dataset is a dataset of written numbers stored in 28x28 pixel greyscale images and is commonly used as a training dataset for neural networks and is frequently used as an introductory learning tool for Machine Learning (ML) and Artificial Intelligence (AI)
 
 # This project is precisely such a use of the MNIST dataset
 
