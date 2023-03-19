@@ -1,16 +1,21 @@
-from dash import Dash, html, dcc, Input, Output
+import os
+from dash import Dash, html, dcc, Input, Output, State, exceptions, no_update
 import pandas as pd
 import numpy as np
 import plotly.express as px
 from plotly import graph_objects as go
+import plotly.io as pio
 import matplotlib.pyplot as plt
+import base64
+from io import BytesIO
+import io
+from PIL import Image
 
 app = Dash(__name__)
 W1 = pd.read_csv('Model Params/W1.csv')
 W2 = pd.read_csv('Model Params/W2.csv')
 b1 = pd.read_csv('Model Params/b1.csv')
 b2 = pd.read_csv('Model Params/b2.csv')
-print(W1.shape, W2.shape, b1.shape, b2.shape)
 
 
 def ReLu(x):
@@ -43,24 +48,28 @@ def test_prediction(im, W1, b1, W2, b2):
     plt.imshow(current_image, interpolation='nearest')
     plt.show()
 
-
 app.layout = html.Div([
-    html.H1('Digit Recognition'),
-    html.Div([
-        '''A Dash Web Application Using a Neural Network to Recognise Digits'''
-    ]),
-    dcc.Graph
-    (
-        id='input_canvas',
-        figure=
-        {
-            'data':[],
-            'layout':{
-                'dragmode': 'drawopenpath'
-            }
-        }
-    )
+    dcc.Graph( id='graph', figure={ 'data': [], 'layout': { 'dragmode': 'drawopenpath'}}),
+    html.Button('Save Image', id='btn-save-image'),
+    html.Div(id='prediction'),
+    html.Img(id='image-drawn')
 ])
 
+@app.callback(
+    Output('image-drawn', 'src'),
+    Output('prediction', 'children'),
+    Input('graph', 'relayoutData'),
+    Input('btn-save-image', 'n_clicks'),
+    State('graph', 'figure')
+)
+def save_image(relayoutData, n_clicks, fig):
+    if n_clicks:
+        src = 'https://www.python.org/static/community_logos/python-logo-master-v3-TM.png'
+        return src, np.random.randint(1)
+    src = 'https://www.python.org/static/community_logos/python-logo-master-v3-TM.png'
+    return src, np.random.randint(1)
+
 if __name__ == '__main__':
+    if not os.path.exists('images'):
+        os.makedirs('images')
     app.run_server(debug=True)
